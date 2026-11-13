@@ -9,9 +9,12 @@ ifeq (skill,$(firstword $(MAKECMDGOALS)))
   endif
 endif
 
+CLAUDE_SKILLS_DIR ?= $(HOME)/.claude/skills
+
 skill:
 	@test -n "$(name)" || { echo "usage: make skill <skill-name>"; exit 1; }
 	@test ! -e "skills/$(name)" || { echo "skills/$(name) already exists"; exit 1; }
+	@test ! -e "$(CLAUDE_SKILLS_DIR)/$(name)" -a ! -L "$(CLAUDE_SKILLS_DIR)/$(name)" || { echo "$(CLAUDE_SKILLS_DIR)/$(name) already exists"; exit 1; }
 	@mkdir -p "skills/$(name)/agents"
 	@title=$$(echo "$(name)" | sed -E 's/(^|-)(.)/\1\U\2/g; s/-/ /g'); \
 	printf '%s\n' \
@@ -28,4 +31,6 @@ skill:
 		'  short_description: "TODO"' \
 		'policy:' \
 		'  allow_implicit_invocation: false' > "skills/$(name)/agents/openai.yaml"
-	@echo "created skills/$(name)"
+	@mkdir -p "$(CLAUDE_SKILLS_DIR)"
+	@ln -s "$(CURDIR)/skills/$(name)" "$(CLAUDE_SKILLS_DIR)/$(name)"
+	@echo "created skills/$(name), linked at $(CLAUDE_SKILLS_DIR)/$(name)"
