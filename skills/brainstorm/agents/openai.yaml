@@ -1,0 +1,5 @@
+interface:
+  display_name: "Brainstorm"
+  short_description: "Conjure up multiple novel ideas, each taking a different approach on how to solve the problem"
+policy:
+  allow_implicit_invocation: false
