@@ -1,0 +1,5 @@
+interface:
+  display_name: "Challenge Me"
+  short_description: "TODO"
+policy:
+  allow_implicit_invocation: false
